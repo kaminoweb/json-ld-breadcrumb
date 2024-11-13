@@ -20,6 +20,7 @@ class Breadcrumb_JSON_LD_Generator {
     // Initialize the plugin
     public function __construct() {
         add_action('save_post', array($this, 'generate_and_save_breadcrumb_json_ld'), 10, 3);
+        add_action('wp_head', array($this, 'add_breadcrumb_json_ld_to_head'));
     }
 
     // Generate and save the breadcrumb JSON-LD schema
@@ -108,8 +109,21 @@ class Breadcrumb_JSON_LD_Generator {
         // Convert the PHP array to a JSON-LD string
         return json_encode($breadcrumb_json_ld, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
     }
+
+    // Output the breadcrumb JSON-LD in the <head> section
+    public function add_breadcrumb_json_ld_to_head() {
+        if (is_single()) {
+            $json_ld = get_post_meta(get_the_ID(), 'breadcrumb-JSON-LD', true);
+            if ($json_ld) {
+                echo '
+                <script type="application/ld+json">' . $json_ld . '</script>
+                ';
+            }
+        }
+    }
 }
 
 // Instantiate the class
 new Breadcrumb_JSON_LD_Generator();
+
 

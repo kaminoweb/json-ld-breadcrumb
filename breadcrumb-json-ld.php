@@ -101,7 +101,7 @@ class Breadcrumb_JSON_LD_Generator {
                     "@type" => "ListItem",
                     "position" => 3,
                     "name" => $post_title,
-                    "item" => $post_url // Correctly formatted post URL
+                    "item" => $post_url . "/" // Correctly formatted post URL
                 ),
             ),
         );
